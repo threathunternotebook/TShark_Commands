@@ -52,8 +52,13 @@ List all IP display filters.
  List all TCP display filters.
 <pre><code>tshark -G fields | awk -F " " '{for (i=1; i<=6; i++) print $i}' | grep "^tcp\." | sort -u</code></pre>
 
+Locate possible shellshock attempt.
+<pre><code>tshark -r <file.pcap> -Y "http.request == 1" -Tfields -e http.user_agent | egrep "bin|bash"</code></pre>
 
-<pre><code> </code></pre>
+In this example, the pcap contains DNS TXT records used for C2. The TXT records conatain a base64 encoded image file that we want to strip out of the PCAP. We will use Foremost to carve out the image.
+<pre><code>tshark -r <file.pcap> -Y dns -Tfields -e dns.txt | while read txt; do echo $txt | base64 -d ; done > extracted</code></pre>
+Now let's use Foremost to carve out the image. The exacted file contains the markers "FILE:" because the image is over multiple packets. We will strip this out and carve out the image with Foremost.
+<pre><code>cat extracted | sed 's/FILE://g' | foremost -T -t jpeg -v -o /tmp/jpg</code></pre>
 
 Print exact timestamp and packets for ESP from pcap file.
 <pre><code>tshark -t ad -Y "ip.proto == 50" -r /nsm/pcapout/test.pcap</code></pre>
