@@ -34,10 +34,27 @@ Locate SSL heartbleed packets
 <pre><code>tshark -r <file.pcap> -O ssl "ssl.heartbeat_message.payload_length > 100"</code></pre>
 <pre><code>tshark -r <file.pcap> -Y "tcp.port==443" -Tfields -e ip.src -e ip.dst -e ip.len -e ssl.heartbeat_message.payload_length</code></pre>
 
+List DNS Server responses
+<pre><code>tshark -r <file.pcap> -Y "dns.qry.type == 1 and dns.a" -Tfields -e dns.qry.name -e dns.a</code></pre>
 
-<pre><code></code></pre>
+List the usernames and passwords used in FTP login attempts
+<pre><code>tshark -r <file.pcap> -n -Y "ftp.request.command contains PASS || ftp.request.command contains USER"</code></pre>
+
+List source IP, destination IP, destination port, tcp flags, sequence numbers and TCP length for all packets coming from 192.168.1.100 to destination port 80. Print the header for each field.
+<pre><code>tshark -r <file.pcap> -E header=y -Y "ip.src==192.168.1.100 and tcp.dstport == 80" -Tfields -e ip.src -e ip.dst -e tcp.dstport -e tcp.flags -e tcp.seq -e tcp.len</code></pre>
+
+Look for "NXDOMAIN" (rcode 3) returned in DNS responses (large number could mean kaminsky cache poisoning attempt).
+<pre><code>tshark -r <file.pcap> -Y "dns.flags.response eq 1 and dns.flags.rcode eq 3" -Tfields -e dns.qry.name -e ip.src -e udp.srcport -e ip.dst -e udp.dstport -e dns.flags.rcode -e dns.id</code></pre>
+
+List all IP display filters.
+<pre><code>tshark -G fields | awk -F " " '{for (i=1; i<=6; i++) print $i}' | grep "^ip\." | sort -u</code></pre>
+
+ List all TCP display filters.
+<pre><code>tshark -G fields | awk -F " " '{for (i=1; i<=6; i++) print $i}' | grep "^tcp\." | sort -u</code></pre>
+
 
 <pre><code> </code></pre>
+
 Print exact timestamp and packets for ESP from pcap file.
 <pre><code>tshark -t ad -Y "ip.proto == 50" -r /nsm/pcapout/test.pcap</code></pre>
 
