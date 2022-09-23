@@ -89,27 +89,21 @@ Look for SMB protocol negotiation
 Look for SMB session establishment where authentication negotiation is successful.
 <pre><code>tshark -n -r <file.pcap> -Y "smb.cmd == 0x73 and spnego.negResult == 0x00"</code></pre>
 
-Look for SMB service access or "Tree COnnect ANDX Request <UNC PATH" "Tree Connect ANDX Response (Tree ID)>.
+Look for SMB service access or "Tree COnnect ANDX Request (UNC PATH" "Tree Connect ANDX Response (Tree ID)).
 <pre><code>tshark -n -r <file.pcap> -Y "smb.cmd == 0x75"</code></pre>
 
-Obtain SMB network directory metadata
-<pre><code>tshark -n -r <file.pcap) -Y "smb.cmd == 0x32 and smb.trans2.cmd == 0x0005 and smb.qpi_loi == 1004"</code></pre>
+Obtain SMB network directory metadata.
+<pre><code>tshark -n -r <file.pcap> -Y "smb.cmd == 0x32 and smb.trans2.cmd == 0x0005 and smb.qpi_loi == 1004"</code></pre>
 
 Look for SMB file open.
 <pre><code>tshark -n -r <file.pcap> -Y "smb.cmd == 0xa2"</code></pre>
 
 Filter all "NT Create ANDX Request" messages that contain a filename.
-<pre><code>tshark -n -r <file.pcap) -Y "smb.cmd == 0xa2 and !(smb.fid) and smb.file"</code></pre>
+<pre><code>tshark -n -r <file.pcap> -Y "smb.cmd == 0xa2 and !(smb.fid) and smb.file"</code></pre>
 
-
-Look for SMB2/SMB3 reading from a file
-<pre><code>tshark -E header=y -n -r smb2.pcap -Y "smb2.cmd == 0x05" -Tfields -e ip.src -e ip.dst -e smb2.filename | egrep -v "^$" | egrep -v "[0-9][[:space:]]$"</code></pre>
+Look for SMB2/SMB3 reading from a file.
+<pre><code>tshark -E header=y -n -r <file.pcap> -Y "smb2.cmd == 0x05" -Tfields -e ip.src -e ip.dst -e smb2.filename | egrep -v "^$" | egrep -v "[0-9][[:space:]]$"</code></pre>
 
 Look for SMB2 Tree Connect. Produce output with network shares.
-<pre><code>tshark -E header=y -n -r smb2.pcap -Y "smb2.cmd == 0x03"</code></pre>
+<pre><code>tshark -E header=y -n -r <file.pcap> -Y "smb2.cmd == 0x03"</code></pre>
 
-
-<pre><code> </code></pre>
-
-
-<pre><code> </code></pre>
