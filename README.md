@@ -4,7 +4,7 @@ Print available tshark fields for IP, TCP, and UDP.
 <pre><code>tshark -G fields | awk -F "\t" '{print $3}' | grep -P "^tcp\.|^ip\.|^udp\." | sort -u</code></pre>
 
 List all known protocols in a PCAP file
-<pre><code>tshark -r <file.pcap> -qz io,phs</code></pre>
+<pre><code>tshark -r \<file.pcap\> -qz io,phs</code></pre>
 
 List IP addresses.
 <pre><code>tshark -r <file.pcap> -qz ip_hosts,tree</code></pre>
